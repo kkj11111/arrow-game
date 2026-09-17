@@ -51,7 +51,7 @@ class ArrowGame:
         self.levels = [
             [Arrow(0, 0, "left"), Arrow(0, 3, "down"), Arrow(2, 3, "left"), Arrow(4, 1, "up"), Arrow(5, 4, "right"), Arrow(3, 5, "right")],
             [Arrow(0, 2, "up"), Arrow(1, 2, "down"), Arrow(2, 4, "right"), Arrow(2, 5, "left"), Arrow(4, 0, "left"), Arrow(5, 3, "down"), Arrow(5, 5, "right")],
-            [Arrow(0, 0, "up"), Arrow(1, 1, "left"), Arrow(1, 4, "right"), Arrow(3, 1, "down"), Arrow(4, 1, "up"), Arrow(4, 4, "down"), Arrow(5, 0, "left"), Arrow(5, 4, "right")],
+            [Arrow(0, 0, "up"), Arrow(1, 1, "left"), Arrow(1, 4, "right"), Arrow(3, 1, "down"), Arrow(4, 1, "right"), Arrow(4, 4, "down"), Arrow(5, 0, "left"), Arrow(5, 4, "right")],
         ]
         self.draw_start()
 
