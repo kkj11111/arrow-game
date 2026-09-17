@@ -103,6 +103,8 @@ class ArrowGame:
             self.start_level(self.level_index)
 
     def handle_arrow_click(self, row: int, col: int) -> None:
+        if not (0 <= row < GRID_SIZE and 0 <= col < GRID_SIZE):
+            return
         arrow = self.arrows.get((row, col))
         if not arrow:
             return
