@@ -92,7 +92,8 @@ class ArrowGame:
             return
         if self.screen == "result":
             if 260 <= event.x <= 500 and 420 <= event.y <= 480:
-                self.start_level(self.level_index if self.misses <= 0 else (self.level_index + 1) % len(self.levels))
+                next_index = (self.level_index + 1) % len(self.levels) if self.result_success else self.level_index
+                self.start_level(next_index)
             return
         if BOARD_LEFT <= event.x < BOARD_LEFT + GRID_SIZE * CELL_SIZE and BOARD_TOP <= event.y < BOARD_TOP + GRID_SIZE * CELL_SIZE:
             col = (event.x - BOARD_LEFT) // CELL_SIZE
@@ -113,6 +114,7 @@ class ArrowGame:
         else:
             self.misses -= 1
             self.message = "前方有箭头阻挡，点击顺序不正确。"
+            self.flash_collision(row, col)
             if self.misses <= 0:
                 self.show_result(False)
         self.draw_game() if self.screen == "game" else None
@@ -127,6 +129,26 @@ class ArrowGame:
             row += dr
             col += dc
         return True
+
+    def show_result(self, success: bool) -> None:
+        self.screen = "result"
+        self.result_success = success
+        self.canvas.delete("all")
+        title = "本关通关！" if success else "挑战失败"
+        subtitle = "准备进入下一关" if success else "失误次数已用完，请重新尝试"
+        color = "#15803d" if success else "#dc2626"
+        self.canvas.create_text(WINDOW_WIDTH // 2, 220, text=title, font=("Microsoft YaHei", 32, "bold"), fill=color)
+        self.canvas.create_text(WINDOW_WIDTH // 2, 275, text=subtitle, font=("Microsoft YaHei", 15), fill=MUTED)
+        self.canvas.create_rectangle(260, 420, 500, 480, fill=ACCENT, outline="")
+        action = "进入下一关" if success else "重新开始"
+        self.canvas.create_text(WINDOW_WIDTH // 2, 450, text=action, font=("Microsoft YaHei", 16, "bold"), fill="white")
+
+    def flash_collision(self, row: int, col: int) -> None:
+        """短暂高亮被阻挡的箭头，提供明确的碰撞反馈。"""
+        x = BOARD_LEFT + col * CELL_SIZE + CELL_SIZE // 2
+        y = BOARD_TOP + row * CELL_SIZE + CELL_SIZE // 2
+        self.canvas.create_text(x, y, text="✕", font=("Arial", 32, "bold"), fill="#dc2626", tags="collision")
+        self.root.after(180, lambda: self.canvas.delete("collision"))
 
     def start_level(self, index: int) -> None:
         self.level_index = index
