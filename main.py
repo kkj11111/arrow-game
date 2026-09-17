@@ -48,10 +48,11 @@ class ArrowGame:
         self.arrows: Dict[Tuple[int, int], Arrow] = {}
         self.misses = MAX_MISSES
         self.message = "点击开始，观察箭头方向并依次清空棋盘。"
-        self.levels = [[
-            Arrow(0, 0, "right"), Arrow(0, 3, "down"), Arrow(2, 3, "left"),
-            Arrow(4, 1, "up"), Arrow(5, 4, "left"), Arrow(3, 5, "up"),
-        ]]
+        self.levels = [
+            [Arrow(0, 0, "left"), Arrow(0, 3, "down"), Arrow(2, 3, "left"), Arrow(4, 1, "up"), Arrow(5, 4, "right"), Arrow(3, 5, "right")],
+            [Arrow(0, 2, "up"), Arrow(1, 2, "down"), Arrow(2, 4, "right"), Arrow(2, 5, "left"), Arrow(4, 0, "left"), Arrow(5, 3, "down"), Arrow(5, 5, "right")],
+            [Arrow(0, 0, "up"), Arrow(1, 1, "left"), Arrow(1, 4, "right"), Arrow(3, 1, "down"), Arrow(4, 1, "up"), Arrow(4, 4, "down"), Arrow(5, 0, "left"), Arrow(5, 4, "right")],
+        ]
         self.draw_start()
 
     def draw_start(self) -> None:
@@ -101,11 +102,31 @@ class ArrowGame:
             self.start_level(self.level_index)
 
     def handle_arrow_click(self, row: int, col: int) -> None:
-        """阶段一只显示点击反馈，路径规则在后续提交中实现。"""
         arrow = self.arrows.get((row, col))
-        if arrow:
-            self.message = f"已选择 {ARROW_SYMBOLS[arrow.direction]} 箭头"
-            self.draw_game()
+        if not arrow:
+            return
+        if self.is_clear_path(arrow):
+            del self.arrows[(row, col)]
+            self.message = f"{ARROW_SYMBOLS[arrow.direction]} 箭头飞出棋盘！"
+            if not self.arrows:
+                self.show_result(True)
+        else:
+            self.misses -= 1
+            self.message = "前方有箭头阻挡，点击顺序不正确。"
+            if self.misses <= 0:
+                self.show_result(False)
+        self.draw_game() if self.screen == "game" else None
+
+    def is_clear_path(self, arrow: Arrow) -> bool:
+        """只检查同一行或同一列、朝向边界一侧的格子。"""
+        dr, dc = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}[arrow.direction]
+        row, col = arrow.row + dr, arrow.col + dc
+        while 0 <= row < GRID_SIZE and 0 <= col < GRID_SIZE:
+            if (row, col) in self.arrows:
+                return False
+            row += dr
+            col += dc
+        return True
 
     def start_level(self, index: int) -> None:
         self.level_index = index
