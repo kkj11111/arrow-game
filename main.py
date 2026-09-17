@@ -134,13 +134,14 @@ class ArrowGame:
         self.screen = "result"
         self.result_success = success
         self.canvas.delete("all")
-        title = "本关通关！" if success else "挑战失败"
-        subtitle = "准备进入下一关" if success else "失误次数已用完，请重新尝试"
+        all_cleared = success and self.level_index == len(self.levels) - 1
+        title = "全部关卡完成！" if all_cleared else ("本关通关！" if success else "挑战失败")
+        subtitle = "点击按钮重新体验" if all_cleared else ("准备进入下一关" if success else "失误次数已用完，请重新尝试")
         color = "#15803d" if success else "#dc2626"
         self.canvas.create_text(WINDOW_WIDTH // 2, 220, text=title, font=("Microsoft YaHei", 32, "bold"), fill=color)
         self.canvas.create_text(WINDOW_WIDTH // 2, 275, text=subtitle, font=("Microsoft YaHei", 15), fill=MUTED)
         self.canvas.create_rectangle(260, 420, 500, 480, fill=ACCENT, outline="")
-        action = "进入下一关" if success else "重新开始"
+        action = "重新开始" if all_cleared else ("进入下一关" if success else "重新开始")
         self.canvas.create_text(WINDOW_WIDTH // 2, 450, text=action, font=("Microsoft YaHei", 16, "bold"), fill="white")
 
     def flash_collision(self, row: int, col: int) -> None:
