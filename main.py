@@ -56,7 +56,7 @@ class ArrowGame:
         self.message = "点击开始，观察箭头方向并依次清空棋盘。"
         self.levels = [
             [Arrow(0, 0, "left"), Arrow(0, 3, "down"), Arrow(2, 3, "left"), Arrow(4, 1, "up"), Arrow(5, 4, "right"), Arrow(3, 5, "right")],
-            [Arrow(0, 2, "up"), Arrow(1, 2, "down"), Arrow(2, 4, "right"), Arrow(2, 5, "left"), Arrow(4, 0, "left"), Arrow(5, 3, "down"), Arrow(5, 5, "right")],
+            [Arrow(0, 2, "up"), Arrow(1, 2, "down"), Arrow(2, 4, "right"), Arrow(2, 5, "right"), Arrow(4, 0, "left"), Arrow(5, 3, "down"), Arrow(5, 5, "right")],
             [Arrow(0, 0, "up"), Arrow(1, 1, "left"), Arrow(1, 4, "right"), Arrow(3, 1, "down"), Arrow(4, 1, "right"), Arrow(4, 4, "down"), Arrow(5, 0, "left"), Arrow(5, 4, "right")],
             [Arrow(0, 1, "up"), Arrow(0, 4, "right"), Arrow(2, 1, "down"), Arrow(2, 4, "left"), Arrow(4, 2, "up"), Arrow(5, 5, "down")],
             [Arrow(0, 0, "left"), Arrow(1, 0, "left"), Arrow(2, 2, "up"), Arrow(3, 2, "down"), Arrow(4, 5, "right"), Arrow(5, 3, "down"), Arrow(5, 5, "right")],
