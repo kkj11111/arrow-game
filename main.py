@@ -65,16 +65,26 @@ class ArrowGame:
 
     def draw_start(self) -> None:
         self.canvas.delete("all")
-        self.canvas.create_text(WINDOW_WIDTH // 2, 170, text="一箭又一箭", font=("Microsoft YaHei", 34, "bold"), fill=INK)
-        self.canvas.create_text(WINDOW_WIDTH // 2, 225, text="点击没有阻挡的箭头，让它飞出棋盘", font=("Microsoft YaHei", 15), fill=MUTED)
-        self.canvas.create_rectangle(250, 320, 510, 385, fill=ACCENT, outline="", tags="start")
-        self.canvas.create_text(WINDOW_WIDTH // 2, 352, text="开始游戏", font=("Microsoft YaHei", 18, "bold"), fill="white")
-        self.canvas.create_text(WINDOW_WIDTH // 2, 440, text="选择关卡", font=("Microsoft YaHei", 13, "bold"), fill=INK)
+        self.canvas.create_rectangle(0, 0, WINDOW_WIDTH, 125, fill="#172554", outline="")
+        self.canvas.create_oval(-70, -80, 130, 120, fill="#1d4ed8", outline="")
+        self.canvas.create_oval(650, -65, 820, 105, fill="#0f766e", outline="")
+        for x, y, direction, color in [(105, 178, "right", "#ef4444"), (650, 178, "left", "#f97316"), (145, 248, "down", "#8b5cf6"), (610, 248, "up", "#0f766e")]:
+            self.canvas.create_text(x, y, text=ARROW_SYMBOLS[direction], font=("Arial", 40, "bold"), fill=color)
+        self.canvas.create_text(WINDOW_WIDTH // 2, 48, text="一箭又一箭", font=("Microsoft YaHei", 34, "bold"), fill="white")
+        self.canvas.create_text(WINDOW_WIDTH // 2, 88, text="ARROW ESCAPE", font=("Arial", 11, "bold"), fill="#bfdbfe")
+        self.canvas.create_text(WINDOW_WIDTH // 2, 285, text="观察方向，找到每一支箭的出口", font=("Microsoft YaHei", 16, "bold"), fill=INK)
+        self.canvas.create_text(WINDOW_WIDTH // 2, 315, text="没有阻挡的箭头才能飞出棋盘", font=("Microsoft YaHei", 12), fill=MUTED)
+        self.canvas.create_rectangle(250, 350, 510, 415, fill="#1d4ed8", outline="", tags="start")
+        self.canvas.create_rectangle(250, 350, 510, 355, fill="#60a5fa", outline="")
+        self.canvas.create_text(WINDOW_WIDTH // 2, 382, text="开始游戏", font=("Microsoft YaHei", 18, "bold"), fill="white")
+        self.canvas.create_text(WINDOW_WIDTH // 2, 458, text="选择关卡", font=("Microsoft YaHei", 13, "bold"), fill=INK)
         for i in range(len(self.levels)):
-            x = 270 + i * 58
-            self.canvas.create_oval(x, 465, x + 38, 503, fill="#dbeafe" if i else ACCENT, outline="", tags=f"level_{i}")
-            self.canvas.create_text(x + 19, 484, text=str(i + 1), font=("Arial", 12, "bold"), fill=INK if i else "white")
-        self.canvas.create_text(WINDOW_WIDTH // 2, 555, text="方向：上 / 下 / 左 / 右    失误机会：3 次    支持撤销", font=("Microsoft YaHei", 12), fill=MUTED)
+            x = 210 + i * 70
+            color = ["#2563eb", "#0f766e", "#7c3aed", "#ea580c", "#db2777"][i]
+            self.canvas.create_oval(x, 485, x + 44, 529, fill=color, outline="", tags=f"level_{i}")
+            self.canvas.create_text(x + 22, 507, text=str(i + 1), font=("Arial", 12, "bold"), fill="white")
+        self.canvas.create_rectangle(150, 570, 610, 618, fill="#e0f2fe", outline="")
+        self.canvas.create_text(WINDOW_WIDTH // 2, 594, text="↑ ↓ ← →  四个方向    ·    3 次失误机会    ·    支持撤销", font=("Microsoft YaHei", 11), fill="#155e75")
 
     def draw_game(self) -> None:
         self.canvas.delete("all")
@@ -104,10 +114,10 @@ class ArrowGame:
 
     def on_click(self, event: tk.Event) -> None:
         if self.screen == "start":
-            if 250 <= event.x <= 510 and 320 <= event.y <= 385:
+            if 250 <= event.x <= 510 and 350 <= event.y <= 415:
                 self.start_level(0)
-            elif 270 <= event.x <= 540 and 460 <= event.y <= 510:
-                index = min(len(self.levels) - 1, max(0, (event.x - 270) // 58))
+            elif 210 <= event.x <= 560 and 480 <= event.y <= 535:
+                index = min(len(self.levels) - 1, max(0, (event.x - 210) // 70))
                 self.start_level(index)
             return
         if self.screen == "result":
